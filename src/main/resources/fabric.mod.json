@@ -1,0 +1,28 @@
+{
+  "schemaVersion": 1,
+  "id": "emcgenesis",
+  "version": "${version}",
+
+  "name": "EMC Genesis",
+  "description": "REPLACE THIS LATER!",
+  "authors": [
+    "MiTask"
+  ],
+  "contact": {
+    "sources": "https://github.com/MrMasrozYTLIVE/EMCGenesis"
+  },
+
+  "license": "MIT",
+  "icon": "assets/emcgenesis/icon.png",
+
+  "environment": "*",
+  "entrypoints": {
+  },
+  "mixins": [
+    "emcgenesis.mixins.json"
+  ],
+
+  "depends": {
+    "minecraft": "1.0.0-beta.7.3"
+  }
+}
