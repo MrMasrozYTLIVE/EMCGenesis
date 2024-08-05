@@ -1,5 +1,5 @@
 plugins {
-	id 'fabric-loom' version '1.6.2'
+	id 'fabric-loom' version '1.7.2'
 	id 'babric-loom-extension' version '1.6.9'
 	id 'maven-publish'
 }
@@ -82,6 +82,9 @@ dependencies {
 	modImplementation("net.glasslauncher:HowManyItems-Fabric-Unofficial:${project.howmanyitems_version}") {
 		transitive false
 	}
+
+	compileOnly 'org.projectlombok:lombok:1.18.34'
+	annotationProcessor 'org.projectlombok:lombok:1.18.34'
 }
 
 processResources {

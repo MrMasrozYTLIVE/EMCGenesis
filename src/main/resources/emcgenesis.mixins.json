@@ -4,11 +4,11 @@
   "package": "net.mitask.emcgenesis.mixin",
   "compatibilityLevel": "JAVA_17",
   "mixins": [
-    "ExampleMixin"
   ],
   "server": [
   ],
   "client": [
+    "TempMixin"
   ],
   "injectors": {
     "defaultRequire": 1
