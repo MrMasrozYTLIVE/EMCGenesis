@@ -17,6 +17,12 @@
 
   "environment": "*",
   "entrypoints": {
+    "stationapi:event_bus_client": [
+      "net.mitask.emcgenesis.event.client.EMCTooltip"
+    ],
+    "client": [
+      "net.mitask.emcgenesis.FabricMain"
+    ]
   },
   "mixins": [
     "emcgenesis.mixins.json"
