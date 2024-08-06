@@ -20,7 +20,7 @@
     "stationapi:event_bus_client": [
       "net.mitask.emcgenesis.event.client.EMCTooltip"
     ],
-    "client": [
+    "main": [
       "net.mitask.emcgenesis.FabricMain"
     ]
   },

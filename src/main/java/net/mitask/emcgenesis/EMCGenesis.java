@@ -3,11 +3,15 @@ package net.mitask.emcgenesis;
 import net.minecraft.item.Item;
 import net.mitask.emcgenesis.util.ItemUtil;
 import net.modificationstation.stationapi.api.tag.TagKey;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.util.LinkedHashMap;
 import java.util.Map;
 
 public class EMCGenesis {
+    public static final Logger LOGGER = LoggerFactory.getLogger("EMCGenesis");
+
     public static Map<String, Long> emcMap = new LinkedHashMap<>();
 
     public static void addItem(Item item, long amount) {
@@ -23,6 +27,11 @@ public class EMCGenesis {
     }
 
     public static long get(Item item) {
+        if(item == null) {
+            LOGGER.error("[long get(Item)] Item is null!");
+            return 0L;
+        }
+
         return emcMap.getOrDefault(ItemUtil.toStringId(item), 0L);
     }
 }

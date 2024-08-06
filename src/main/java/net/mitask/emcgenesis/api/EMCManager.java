@@ -1,5 +1,6 @@
 package net.mitask.emcgenesis.api;
 
+import net.minecraft.block.Block;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.Item;
 import net.mitask.emcgenesis.EMCGenesis;
@@ -14,6 +15,10 @@ import java.util.UUID;
 
 public class EMCManager {
     public static class ITEM {
+        public static void setEMC(Block block, long amount) {
+            EMCGenesis.addItem(block.asItem(), amount);
+        }
+
         public static void setEMC(Item item, long amount) {
             EMCGenesis.addItem(item, amount);
         }
