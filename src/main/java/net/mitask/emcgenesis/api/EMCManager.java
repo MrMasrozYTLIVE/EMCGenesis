@@ -4,6 +4,7 @@ import net.minecraft.block.Block;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.Item;
 import net.mitask.emcgenesis.EMCGenesis;
+import net.mitask.emcgenesis.api.def.EMCDef;
 import net.mitask.emcgenesis.util.IdentifierUtil;
 import net.mitask.emcgenesis.util.ItemUtil;
 import net.mitask.emcgenesis.util.Player;
@@ -66,5 +67,13 @@ public class EMCManager {
                     "emcgenesis_player_" + UUID.nameUUIDFromBytes(playerEntity.name.getBytes(StandardCharsets.UTF_8))
             );
         }
+    }
+
+    public static void addDef(EMCDef def) {
+        def.addAll();
+    }
+
+    public static void addDef(EMCDef... defs) {
+        for(EMCDef def : defs) addDef(def);
     }
 }

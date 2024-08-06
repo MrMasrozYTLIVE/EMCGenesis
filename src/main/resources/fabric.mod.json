@@ -17,6 +17,9 @@
 
   "environment": "*",
   "entrypoints": {
+    "stationapi:event_bus": [
+      "net.mitask.emcgenesis.event.InitializeEMCEvent"
+    ],
     "stationapi:event_bus_client": [
       "net.mitask.emcgenesis.event.client.EMCTooltip"
     ],

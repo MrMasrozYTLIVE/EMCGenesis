@@ -23,13 +23,18 @@ public class ItemUtil {
     }
 
     public static List<Item> getItemsOfTag(TagKey<Item> tagKey) {
-        List<Item> list = new ArrayList<>();
+        List<Item> items = new ArrayList<>();
+
         ITEMS.getEntryList(tagKey).ifPresent(registryEntries -> registryEntries.forEach(itemRegistryEntry -> {
             var key = itemRegistryEntry.getKey();
             if(key.isEmpty()) return;
-            list.add(ITEMS.get(key.get()));
+            items.add(ITEMS.get(key.get()));
         }));
 
-        return list;
+        return items;
+    }
+
+    public static List<Item> getItemsOfTag(String tag) {
+        return getItemsOfTag(TagKey.of(ItemRegistry.KEY, IdentifierUtil.id(tag)));
     }
 }
