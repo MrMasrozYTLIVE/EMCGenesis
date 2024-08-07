@@ -9,7 +9,7 @@ public class EMCTooltip {
     @EventListener
     public void addEMCTooltip(TooltipBuildEvent event) {
         Item item = event.itemStack.getItem();
-        long emc = EMCManager.ITEM.getEMC(item);
+        long emc = EMCManager.ITEM.getEMC(item, event.itemStack.getDamage());
         if (emc == 0) return;
 
         event.tooltip.add("§eEMC: §r" + String.format("%,d", emc));

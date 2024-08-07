@@ -1,7 +1,6 @@
 package net.mitask.emcgenesis.event;
 
 import net.mine_diver.unsafeevents.listener.EventListener;
-import net.minecraft.recipe.CraftingRecipe;
 import net.minecraft.recipe.CraftingRecipeManager;
 import net.mitask.emcgenesis.EMCGenesis;
 import net.mitask.emcgenesis.api.EMCManager;

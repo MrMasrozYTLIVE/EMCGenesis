@@ -17,9 +17,15 @@ public class EMCGenesis {
     public static void addItem(Item item, long amount) {
         addItem(ItemUtil.toStringId(item), amount);
     }
-    
     public static void addItem(String id, long amount) {
         emcMap.put(id, amount);
+    }
+
+    public static void addItem(Item item, int meta, long amount) {
+        addItem(ItemUtil.toStringId(item), meta, amount);
+    }
+    public static void addItem(String id, int meta, long amount) {
+        emcMap.put(id + "_" + meta, amount);
     }
 
     public static void addTag(TagKey<Item> tagKey, long amount) {
@@ -33,5 +39,14 @@ public class EMCGenesis {
         }
 
         return emcMap.getOrDefault(ItemUtil.toStringId(item), 0L);
+    }
+    public static long getWithMetadata(Item item, int meta) {
+        if(item == null) {
+            LOGGER.error("[long get(Item, Int)] Item is null!");
+            return 0L;
+        }
+        if(meta <= 0) return get(item);
+
+        return emcMap.getOrDefault(ItemUtil.toStringId(item) + "_" + meta, 0L);
     }
 }
