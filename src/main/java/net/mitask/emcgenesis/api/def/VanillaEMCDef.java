@@ -124,7 +124,6 @@ public class VanillaEMCDef implements EMCDef {
         add(Item.GOLDEN_AXE, 6152);
         add(Item.STRING, 12);
         add(Item.FEATHER, 48);
-//        add(Item.SULPHUR, 192);
         add(Item.WOODEN_HOE, 24);
         add(Item.STONE_HOE, 10);
         add(Item.IRON_HOE, 520);
@@ -200,7 +199,7 @@ public class VanillaEMCDef implements EMCDef {
         add(Item.BONE, 144);
         add(Item.SUGAR, 32);
         add(Item.CAKE, 411);
-        add(Item.BED, 144);
+        add(Item.BED, 168);
         add(Item.REPEATER, 203);
         add(Item.COOKIE, 22);
         add(Item.MAP, 1344);

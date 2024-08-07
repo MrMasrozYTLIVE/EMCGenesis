@@ -3,6 +3,7 @@ package net.mitask.emcgenesis.api;
 import net.minecraft.block.Block;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.Item;
+import net.minecraft.item.ItemStack;
 import net.mitask.emcgenesis.EMCGenesis;
 import net.mitask.emcgenesis.api.def.EMCDef;
 import net.mitask.emcgenesis.util.IdentifierUtil;
@@ -14,6 +15,7 @@ import net.modificationstation.stationapi.api.tag.TagKey;
 import java.nio.charset.StandardCharsets;
 import java.util.UUID;
 
+@SuppressWarnings("unused")
 public class EMCManager {
     public static class ITEM {
         public static void setEMC(Block block, long amount) {
@@ -35,6 +37,9 @@ public class EMCManager {
         }
         public static long getEMC(Item item, int meta) {
             return EMCGenesis.getWithMetadata(item, meta);
+        }
+        public static long getEMC(ItemStack item) {
+            return getEMC(item.getItem(), item.getDamage());
         }
 
         public static long getEMC(String id) {

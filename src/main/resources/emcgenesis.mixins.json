@@ -4,6 +4,10 @@
   "package": "net.mitask.emcgenesis.mixin",
   "compatibilityLevel": "JAVA_17",
   "mixins": [
+    "ShapedRecipeAccessor",
+    "ShapelessRecipeAccessor",
+    "StationShapedRecipeAccessor",
+    "StationShapelessRecipeAccessor"
   ],
   "server": [
   ],
