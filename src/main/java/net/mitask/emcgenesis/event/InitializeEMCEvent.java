@@ -5,6 +5,7 @@ import net.mine_diver.unsafeevents.listener.EventListener;
 import net.minecraft.ShapedRecipe;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
+import net.minecraft.recipe.CraftingRecipe;
 import net.minecraft.recipe.CraftingRecipeManager;
 import net.minecraft.recipe.ShapelessRecipe;
 import net.mitask.emcgenesis.EMCGenesis;
@@ -30,32 +31,47 @@ public class InitializeEMCEvent {
         List recipes = CraftingRecipeManager.getInstance().getRecipes();
         EMCGenesis.LOGGER.info("Loading EMC from {} recipes", recipes.size());
         for(Object rec : recipes) {
-            if(rec instanceof ShapedRecipe recipe) handleShapedRecipe(recipe);
-            if(rec instanceof ShapelessRecipe recipe) handleShapelessRecipe(recipe);
-            if(rec instanceof StationShapedRecipe recipe) handleShapedRecipe(recipe);
-            if(rec instanceof StationShapelessRecipe recipe) handleShapelessRecipe(recipe);
+            var input = getInputs(rec);
+            CraftingRecipe recipe = (CraftingRecipe) rec;
+
+            ItemStack output = recipe.getOutput();
+            if(shouldIgnoreRecipe(output)) return;
+
+            long EMC = calculateEMC(output, input);
+            if(EMC == 0 && !retryRecipes.contains(recipe)) retryRecipes.add(recipe);
+            else if(EMC != 0) retryRecipes.remove(recipe);
+
+            handleRecipe(EMC, output);
         }
 
         recalculateEMC();
     }
 
-    int tries = 0;
+    boolean wasEMCCalculated;
     private void recalculateEMC() {
         if(retryRecipes.isEmpty()) return;
+        wasEMCCalculated = false;
 
         EMCGenesis.LOGGER.debug("Starting new thread for calculating EMC!");
         Thread thread = new Thread(() -> {
-            EMCGenesis.LOGGER.info("Retrying to calculate EMC for {} recipes (try #{})", retryRecipes.size(), tries + 1);
+            EMCGenesis.LOGGER.info("Retrying to calculate EMC for {} recipes", retryRecipes.size());
 
             for (Object rec : retryRecipes) {
-                if (rec instanceof ShapedRecipe recipe) handleShapedRecipe(recipe);
-                if (rec instanceof ShapelessRecipe recipe) handleShapelessRecipe(recipe);
-                if (rec instanceof StationShapedRecipe recipe) handleShapedRecipe(recipe);
-                if (rec instanceof StationShapelessRecipe recipe) handleShapelessRecipe(recipe);
+                var input = getInputs(rec);
+                CraftingRecipe recipe = (CraftingRecipe) rec;
+
+                ItemStack output = recipe.getOutput();
+                if(shouldIgnoreRecipe(output)) return;
+
+                long EMC = calculateEMC(output, input);
+                if(EMC == 0 && !retryRecipes.contains(recipe)) retryRecipes.add(recipe);
+                else if(EMC != 0) retryRecipes.remove(recipe);
+
+                handleRecipe(EMC, output);
             }
 
-            tries++;
-            if(!retryRecipes.isEmpty() && tries < 5) recalculateEMC();
+            if(!retryRecipes.isEmpty() && wasEMCCalculated) recalculateEMC();
+            else EMCGenesis.LOGGER.error("Did not calculate new EMC but still having {} recipes unmapped!", retryRecipes.size());
         });
         thread.setName("EMCCalculation");
         thread.start();
@@ -87,70 +103,13 @@ public class InitializeEMCEvent {
                 ItemUtil.toStringId(output).startsWith("minecraft:chainmail_");
     }
 
-    private void handleShapedRecipe(ShapedRecipe recipe) {
-        List<ItemStack> input = Arrays.stream(recipe.input).toList();
-        ItemStack output = recipe.getOutput();
-        if(shouldIgnoreRecipe(output)) return;
-
-        long EMC = calculateEMCVanilla(output, input);
-        if(EMC == 0 && !retryRecipes.contains(recipe)) retryRecipes.add(recipe);
-        else if(EMC != 0) retryRecipes.remove(recipe);
-
-        handleRecipe(EMC, output);
-    }
-
-    private void handleShapelessRecipe(ShapelessRecipe recipe) {
-        List<ItemStack> input = recipe.input;
-        ItemStack output = recipe.getOutput();
-        if(shouldIgnoreRecipe(output)) return;
-
-        long EMC = calculateEMCVanilla(output, input);
-        if(EMC == 0 && !retryRecipes.contains(recipe)) retryRecipes.add(recipe);
-        else if(EMC != 0) retryRecipes.remove(recipe);
-
-        handleRecipe(EMC, output);
-    }
-
-    private void handleShapedRecipe(StationShapedRecipe recipe) {
-        List<Either<TagKey<Item>, ItemStack>> grid = Arrays.stream(recipe.getGrid()).toList();
-        ItemStack output = recipe.getOutput();
-        if(shouldIgnoreRecipe(output)) return;
-
-        long EMC = calculateEMC(output, grid);
-        if(EMC == 0 && !retryRecipes.contains(recipe)) retryRecipes.add(recipe);
-        else if(EMC != 0) retryRecipes.remove(recipe);
-
-        handleRecipe(EMC, output);
-    }
-
-    // TODO: Replace recipe.getInputs() in alpha.3
-    private void handleShapelessRecipe(StationShapelessRecipe recipe) {
-        List<Either<TagKey<Item>, ItemStack>> grid = Arrays.stream(recipe.getInputs()).toList();
-        ItemStack output = recipe.getOutput();
-        if(shouldIgnoreRecipe(output)) return;
-
-        long EMC = calculateEMC(output, grid);
-        if(EMC == 0 && !retryRecipes.contains(recipe)) retryRecipes.add(recipe);
-        else if(EMC != 0) retryRecipes.remove(recipe);
-
-        handleRecipe(EMC, output);
-    }
-
-    private long calculateEMCVanilla(ItemStack output, List<ItemStack> input) {
-        long emc = 0;
-        for(ItemStack itemStack : input) {
-            if(itemStack == null) continue;
-
-            long itemEmc = EMCManager.ITEM.getEMC(itemStack);
-            if(itemEmc == 0) {
-                if(tries > 3) EMCGenesis.LOGGER.error("Recipe for {} has item without EMC!", output.getItem().getTranslatedName());
-                emc = 0;
-                break;
-            }
-
-            emc += itemEmc;
-        }
-        return emc / output.count;
+    private List<Either<TagKey<Item>, ItemStack>> getInputs(Object rec) {
+        if(rec instanceof ShapedRecipe recipe) return Arrays.stream(recipe.input).map(Either::<TagKey<Item>, ItemStack>right).toList();
+        if(rec instanceof ShapelessRecipe recipe) return ((List<ItemStack>) recipe.input).stream().map(Either::<TagKey<Item>, ItemStack>right).toList();
+        if(rec instanceof StationShapedRecipe recipe) return Arrays.stream(recipe.getGrid()).toList();
+        // TODO: Replace recipe.getInputs() in alpha.3
+        if(rec instanceof StationShapelessRecipe recipe) return Arrays.stream(recipe.getInputs()).toList();
+        return null;
     }
 
     private long calculateEMC(ItemStack output, List<Either<TagKey<Item>, ItemStack>> grid) {
@@ -170,7 +129,7 @@ public class InitializeEMCEvent {
 
                     long itemEmc = EMCManager.ITEM.getEMC(item);
                     if (itemEmc == 0) {
-                        if(tries > 3) EMCGenesis.LOGGER.error("Recipe for {} has item without EMC!", output.getItem().getTranslatedName());
+//                        EMCGenesis.LOGGER.error("Recipe for {} has item without EMC!", output.getItem().getTranslatedName());
                         emc.set(0);
                         shouldContinue.set(false);
                         return;
@@ -185,7 +144,7 @@ public class InitializeEMCEvent {
 
                 long itemEmc = EMCManager.ITEM.getEMC(item);
                 if(itemEmc == 0) {
-                    if(tries > 3) EMCGenesis.LOGGER.error("Recipe for {} has item without EMC!", output.getItem().getTranslatedName());
+//                    EMCGenesis.LOGGER.error("Recipe for {} has item without EMC!", output.getItem().getTranslatedName());
                     emc.set(0);
                     shouldContinue.set(false);
                     return;
@@ -194,7 +153,7 @@ public class InitializeEMCEvent {
             });
         }
 
-
+        if(emc.get() > 0) wasEMCCalculated = true;
 
         return emc.get() / output.count;
     }
