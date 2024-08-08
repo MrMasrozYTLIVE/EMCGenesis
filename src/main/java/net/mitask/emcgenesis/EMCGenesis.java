@@ -29,7 +29,8 @@ public class EMCGenesis {
         addItem(item.getItem(), item.getDamage(), amount);
     }
     public static void addItem(String id, int meta, long amount) {
-        emcMap.put(id + "_" + meta, amount);
+        id = meta > 0 ? id + "_" + meta : id;
+        emcMap.put(id, amount);
     }
 
     public static void addTag(TagKey<Item> tagKey, long amount) {
