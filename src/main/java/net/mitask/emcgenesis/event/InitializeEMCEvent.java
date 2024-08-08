@@ -30,12 +30,18 @@ public class InitializeEMCEvent {
 
         List recipes = CraftingRecipeManager.getInstance().getRecipes();
         EMCGenesis.LOGGER.info("Loading EMC from {} recipes", recipes.size());
+        iterateOverRecipes(recipes);
+
+        recalculateEMC();
+    }
+
+    private void iterateOverRecipes(List recipes) {
         for(Object rec : recipes) {
             var input = getInputs(rec);
             CraftingRecipe recipe = (CraftingRecipe) rec;
 
             ItemStack output = recipe.getOutput();
-            if(shouldIgnoreRecipe(output)) return;
+            if(shouldIgnoreRecipe(output)) continue;
 
             long EMC = calculateEMC(output, input);
             if(EMC == 0 && !retryRecipes.contains(recipe)) retryRecipes.add(recipe);
@@ -43,8 +49,6 @@ public class InitializeEMCEvent {
 
             handleRecipe(EMC, output);
         }
-
-        recalculateEMC();
     }
 
     boolean wasEMCCalculated;
@@ -56,22 +60,10 @@ public class InitializeEMCEvent {
         Thread thread = new Thread(() -> {
             EMCGenesis.LOGGER.info("Retrying to calculate EMC for {} recipes", retryRecipes.size());
 
-            for (Object rec : retryRecipes) {
-                var input = getInputs(rec);
-                CraftingRecipe recipe = (CraftingRecipe) rec;
-
-                ItemStack output = recipe.getOutput();
-                if(shouldIgnoreRecipe(output)) return;
-
-                long EMC = calculateEMC(output, input);
-                if(EMC == 0 && !retryRecipes.contains(recipe)) retryRecipes.add(recipe);
-                else if(EMC != 0) retryRecipes.remove(recipe);
-
-                handleRecipe(EMC, output);
-            }
+            iterateOverRecipes(retryRecipes.stream().toList());
 
             if(!retryRecipes.isEmpty() && wasEMCCalculated) recalculateEMC();
-            else EMCGenesis.LOGGER.error("Did not calculate new EMC but still having {} recipes unmapped!", retryRecipes.size());
+            else if(!retryRecipes.isEmpty()) EMCGenesis.LOGGER.error("Did not calculate new EMC but still having {} recipes unmapped!", retryRecipes.size());
         });
         thread.setName("EMCCalculation");
         thread.start();
@@ -84,7 +76,7 @@ public class InitializeEMCEvent {
 
         long setEMC = EMCManager.ITEM.getEMC(output);
 
-        if(setEMC != calculatedEMC) {
+        if(setEMC == 0 && setEMC != calculatedEMC) {
             EMCGenesis.LOGGER.warn("Overwriting EMC for item {} based of its recipe!", ItemUtil.toStringId(output.getItem()));
             EMCGenesis.LOGGER.debug("This item has calculated EMC of {} ({}emc / {}count)", calculatedEMC, calculatedEMC * output.count, output.count);
             EMCGenesis.LOGGER.debug("This item set EMC is {}", setEMC);
@@ -95,9 +87,7 @@ public class InitializeEMCEvent {
     }
 
     private boolean shouldIgnoreRecipe(ItemStack output) {
-        return ItemUtil.toStringId(output).equals("minecraft:wool") ||
-                ItemUtil.toStringId(output).equals("minecraft:dye") ||
-                ItemUtil.toStringId(output).equals("minecraft:torch") ||
+        return ItemUtil.toStringId(output).equals("minecraft:torch") ||
                 ItemUtil.toStringId(output).equals("minecraft:oak_pressure_plate") ||
                 ItemUtil.toStringId(output).equals("minecraft:stone_pressure_plate") ||
                 ItemUtil.toStringId(output).startsWith("minecraft:chainmail_");
@@ -124,18 +114,19 @@ public class InitializeEMCEvent {
                 if(itemTagKey == null) return;
                 if(!shouldContinue.get()) return;
 
+                AtomicLong lowestEMC = new AtomicLong(Long.MAX_VALUE);
                 ItemUtil.getItemsOfTag(itemTagKey).forEach(item -> {
-                    if(!shouldContinue.get()) return;
-
-                    long itemEmc = EMCManager.ITEM.getEMC(item);
-                    if (itemEmc == 0) {
-//                        EMCGenesis.LOGGER.error("Recipe for {} has item without EMC!", output.getItem().getTranslatedName());
-                        emc.set(0);
-                        shouldContinue.set(false);
-                        return;
-                    }
-                    emc.addAndGet(itemEmc);
+                    long itemEMC = EMCManager.ITEM.getEMC(item);
+                    if(itemEMC != 0 && lowestEMC.get() > itemEMC) lowestEMC.set(itemEMC);
                 });
+
+                if(lowestEMC.get() == Long.MAX_VALUE) {
+                    EMCGenesis.LOGGER.debug("Recipe for {} has item tag without EMC!", output.getItem().getTranslatedName());
+                    emc.set(0);
+                    shouldContinue.set(false);
+                    return;
+                }
+                emc.addAndGet(lowestEMC.get());
             });
 
             gridItem.ifRight(item -> {
@@ -144,7 +135,7 @@ public class InitializeEMCEvent {
 
                 long itemEmc = EMCManager.ITEM.getEMC(item);
                 if(itemEmc == 0) {
-//                    EMCGenesis.LOGGER.error("Recipe for {} has item without EMC!", output.getItem().getTranslatedName());
+                    EMCGenesis.LOGGER.debug("Recipe for {} has item without EMC!", output.getItem().getTranslatedName());
                     emc.set(0);
                     shouldContinue.set(false);
                     return;
