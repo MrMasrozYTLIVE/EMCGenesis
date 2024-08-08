@@ -10,13 +10,8 @@ import net.minecraft.recipe.ShapelessRecipe;
 import net.mitask.emcgenesis.EMCGenesis;
 import net.mitask.emcgenesis.api.EMCManager;
 import net.mitask.emcgenesis.api.def.VanillaEMCDef;
-import net.mitask.emcgenesis.mixin.ShapedRecipeAccessor;
-import net.mitask.emcgenesis.mixin.ShapelessRecipeAccessor;
-import net.mitask.emcgenesis.mixin.StationShapedRecipeAccessor;
-import net.mitask.emcgenesis.mixin.StationShapelessRecipeAccessor;
 import net.mitask.emcgenesis.util.ItemUtil;
 import net.modificationstation.stationapi.api.event.registry.RegistriesFrozenEvent;
-import net.modificationstation.stationapi.api.recipe.StationRecipe;
 import net.modificationstation.stationapi.api.tag.TagKey;
 import net.modificationstation.stationapi.impl.recipe.StationShapedRecipe;
 import net.modificationstation.stationapi.impl.recipe.StationShapelessRecipe;
@@ -31,9 +26,9 @@ public class InitializeEMCEvent {
         EMCGenesis.LOGGER.info("Loading EMC Def");
         EMCManager.addDef(new VanillaEMCDef());
 
-        List<StationRecipe> recipes = CraftingRecipeManager.getInstance().getRecipes();
-        EMCGenesis.LOGGER.info("Loading EMC from " + recipes.size() + " recipes");
-        for(StationRecipe rec : recipes) {
+        List recipes = CraftingRecipeManager.getInstance().getRecipes();
+        EMCGenesis.LOGGER.info("Loading EMC from {} recipes", recipes.size());
+        for(Object rec : recipes) {
             if(rec instanceof ShapedRecipe recipe) handleShapedRecipe(recipe);
             if(rec instanceof ShapelessRecipe recipe) handleShapelessRecipe(recipe);
             if(rec instanceof StationShapedRecipe recipe) handleShapedRecipe(recipe);
@@ -42,68 +37,103 @@ public class InitializeEMCEvent {
     }
 
     private void handleRecipe(long calculatedEMC, ItemStack output) {
+//        I will actually let it override EMC to 0, so I can know if something is wrong
+//        if(calculatedEMC == 0) return;
+
         long setEMC = EMCManager.ITEM.getEMC(output);
 
         if(setEMC != calculatedEMC) {
-            System.out.println("ShapedRecipe - " + ItemUtil.toStringId(output.getItem()));
-            System.out.println("This item has calculated EMC of " + calculatedEMC + " (" + calculatedEMC * output.count + "emc / " + output.count + "count)");
-            System.out.println("This item set EMC is " + setEMC);
-            System.out.println("------------------------------");
+            EMCGenesis.LOGGER.warn("Overwriting EMC for item {} based of its recipe!", ItemUtil.toStringId(output.getItem()));
+            EMCGenesis.LOGGER.warn("This item has calculated EMC of {} ({}emc / {}count)", calculatedEMC, calculatedEMC * output.count, output.count);
+            EMCGenesis.LOGGER.warn("This item set EMC is {}", setEMC);
+            EMCGenesis.LOGGER.warn("------------------------------");
+
+            EMCManager.ITEM.setEMC(output, setEMC);
         }
     }
 
+    private boolean shouldIgnoreRecipe(ItemStack output) {
+        return ItemUtil.toStringId(output).equals("minecraft:wool") ||
+                ItemUtil.toStringId(output).equals("minecraft:dye") ||
+                ItemUtil.toStringId(output).equals("minecraft:torch") ||
+                ItemUtil.toStringId(output).equals("minecraft:oak_pressure_plate") ||
+                ItemUtil.toStringId(output).equals("minecraft:stone_pressure_plate") ||
+                ItemUtil.toStringId(output).startsWith("minecraft:chainmail_");
+    }
+
     private void handleShapedRecipe(ShapedRecipe recipe) {
-        List<ItemStack> input = Arrays.stream(((ShapedRecipeAccessor) recipe).getInput()).toList();
-        List<Either<TagKey<Item>, ItemStack>> grid = input.stream().map(Either::<TagKey<Item>, ItemStack>right).toList();
+        List<ItemStack> input = Arrays.stream(recipe.input).toList();
         ItemStack output = recipe.getOutput();
-        handleRecipe(calculateEMC(output, grid), output);
+        if(shouldIgnoreRecipe(output)) return;
+
+        handleRecipe(calculateEMCVanilla(output, input), output);
     }
 
     private void handleShapelessRecipe(ShapelessRecipe recipe) {
-        List<ItemStack> input = ((ShapelessRecipeAccessor) recipe).getInput();
-        List<Either<TagKey<Item>, ItemStack>> grid = input.stream().map(Either::<TagKey<Item>, ItemStack>right).toList();
+        List<ItemStack> input = recipe.input;
         ItemStack output = recipe.getOutput();
-        handleRecipe(calculateEMC(output, grid), output);
+        if(shouldIgnoreRecipe(output)) return;
+
+        handleRecipe(calculateEMCVanilla(output, input), output);
     }
 
     private void handleShapedRecipe(StationShapedRecipe recipe) {
-        List<Either<TagKey<Item>, ItemStack>> grid = Arrays.stream(((StationShapedRecipeAccessor) recipe).getGrid()).toList();
+        List<Either<TagKey<Item>, ItemStack>> grid = Arrays.stream(recipe.getGrid()).toList();
         ItemStack output = recipe.getOutput();
+        if(shouldIgnoreRecipe(output)) return;
+
         handleRecipe(calculateEMC(output, grid), output);
     }
 
+    // TODO: Replace recipe.getInputs() in alpha.3
     private void handleShapelessRecipe(StationShapelessRecipe recipe) {
-        List<Either<TagKey<Item>, ItemStack>> grid = Arrays.stream(((StationShapelessRecipeAccessor) recipe).getIngredients()).toList();
+        List<Either<TagKey<Item>, ItemStack>> grid = Arrays.stream(recipe.getInputs()).toList();
         ItemStack output = recipe.getOutput();
+        if(shouldIgnoreRecipe(output)) return;
+
         handleRecipe(calculateEMC(output, grid), output);
+    }
+
+    private long calculateEMCVanilla(ItemStack output, List<ItemStack> input) {
+        long emc = 0;
+        for(ItemStack itemStack : input) {
+            if(itemStack == null) continue;
+
+            long itemEmc = EMCManager.ITEM.getEMC(itemStack);
+            if(itemEmc == 0) {
+                EMCGenesis.LOGGER.error("Recipe for {} has item without EMC! Returning!", output.getItem().getTranslatedName());
+                break;
+            }
+
+            emc += itemEmc;
+        }
+        return emc / output.count;
     }
 
     private long calculateEMC(ItemStack output, List<Either<TagKey<Item>, ItemStack>> grid) {
         AtomicLong emc = new AtomicLong();
         for(var gridItem : grid) {
             if(gridItem == null) continue;
+
             gridItem.ifLeft(itemTagKey -> {
-                if(itemTagKey == null) {
-                    System.out.println("tagKey == null for item " + output.getItem().getTranslatedName());
-                    return;
-                }
+                if(itemTagKey == null) return;
+
                 ItemUtil.getItemsOfTag(itemTagKey).forEach(item -> {
                     long itemEmc = EMCManager.ITEM.getEMC(item);
                     if (itemEmc == 0) {
-                        System.out.println("This recipe has item without EMC! Returning!");
+                        EMCGenesis.LOGGER.error("Recipe for {} has item without EMC! Returning!", output.getItem().getTranslatedName());
                         return;
                     }
                     emc.addAndGet(itemEmc);
                 });
             });
+
             gridItem.ifRight(item -> {
-                if(item == null) {
-                    System.out.println("item == null for item " + output.getItem().getTranslatedName());
-                    return;
-                }
+                if(item == null) return;
+
                 long itemEmc = EMCManager.ITEM.getEMC(item);
                 if(itemEmc == 0) {
-                    System.out.println("This recipe has item without EMC! Returning!");
+                    EMCGenesis.LOGGER.error("Recipe for {} has item without EMC! Returning!", output.getItem().getTranslatedName());
                     return;
                 }
                 emc.addAndGet(itemEmc);
