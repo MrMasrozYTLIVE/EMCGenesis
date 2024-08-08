@@ -2,6 +2,7 @@ package net.mitask.emcgenesis.util;
 
 import net.minecraft.block.Block;
 import net.minecraft.item.Item;
+import net.minecraft.item.ItemStack;
 import net.modificationstation.stationapi.api.registry.BlockRegistry;
 import net.modificationstation.stationapi.api.registry.ItemRegistry;
 import net.modificationstation.stationapi.api.tag.TagKey;
@@ -21,7 +22,14 @@ public class ItemUtil {
     public static Identifier toId(Item item) {
         return ITEMS.getId(item);
     }
+    public static Identifier toId(ItemStack item) {
+        return ITEMS.getId(item.getItem());
+    }
+
     public static String toStringId(Item item) {
+        return toId(item).toString();
+    }
+    public static String toStringId(ItemStack item) {
         return toId(item).toString();
     }
 

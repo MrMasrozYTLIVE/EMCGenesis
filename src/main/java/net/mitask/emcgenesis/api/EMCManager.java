@@ -24,6 +24,9 @@ public class EMCManager {
         public static void setEMC(Item item, long amount) {
             EMCGenesis.addItem(item, amount);
         }
+        public static void setEMC(ItemStack item, long amount) {
+            EMCGenesis.addItem(item, amount);
+        }
         public static void setEMC(String id, long amount) {
             EMCGenesis.addItem(id, amount);
         }

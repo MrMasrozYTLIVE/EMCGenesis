@@ -1,6 +1,7 @@
 package net.mitask.emcgenesis;
 
 import net.minecraft.item.Item;
+import net.minecraft.item.ItemStack;
 import net.mitask.emcgenesis.util.ItemUtil;
 import net.modificationstation.stationapi.api.tag.TagKey;
 import org.slf4j.Logger;
@@ -23,6 +24,9 @@ public class EMCGenesis {
 
     public static void addItem(Item item, int meta, long amount) {
         addItem(ItemUtil.toStringId(item), meta, amount);
+    }
+    public static void addItem(ItemStack item, long amount) {
+        addItem(item.getItem(), item.getDamage(), amount);
     }
     public static void addItem(String id, int meta, long amount) {
         emcMap.put(id + "_" + meta, amount);

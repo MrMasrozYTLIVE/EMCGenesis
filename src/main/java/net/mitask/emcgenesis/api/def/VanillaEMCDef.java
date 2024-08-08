@@ -22,8 +22,8 @@ public class VanillaEMCDef implements EMCDef {
         add(Block.DISPENSER, 119);
         add(Block.SANDSTONE, 4);
         add(Block.NOTE_BLOCK, 128);
-        add(Block.POWERED_RAIL, 2048);
-        add(Block.DETECTOR_RAIL, 256);
+        add(Block.POWERED_RAIL, 2059);
+        add(Block.DETECTOR_RAIL, 269);
         add(Block.STICKY_PISTON, 372);
         add(Block.COBWEB, 12);
         add(Block.GRASS, 1);
@@ -70,8 +70,7 @@ public class VanillaEMCDef implements EMCDef {
         add(Block.GLOWSTONE, 1536);
         add(Block.PUMPKIN, 144);
         add(Block.TRAPDOOR, 24);
-        add(Block.FENCE, 96);
-        add(Block.LIT_REDSTONE_TORCH, 1792);
+        add(Block.LIT_REDSTONE_TORCH, 68);
 //        addWithMetadata(EEBlock, 0, 82953);
 //        addWithMetadata(EEBlock, 1, 232969);
 //        addWithMetadata(EEBlock, 2, 710665);
@@ -152,7 +151,7 @@ public class VanillaEMCDef implements EMCDef {
         add(Item.RAW_PORKCHOP, 64);
         add(Item.COOKED_PORKCHOP, 64);
         add(Item.PAINTING, 80);
-        add(Item.GOLDEN_APPLE, 1944);
+        add(Item.GOLDEN_APPLE, 147584);
         add(Item.SIGN, 52);
         add(Item.WOODEN_DOOR, 48);
         add(Item.BUCKET, 768);
@@ -175,7 +174,7 @@ public class VanillaEMCDef implements EMCDef {
         add(Item.FURNACE_MINECART, 1288);
         add(Item.EGG, 32);
         add(Item.COMPASS, 1088);
-        add(Item.FISHING_ROD, 12);
+        add(Item.FISHING_ROD, 36);
         add(Item.CLOCK, 8256);
         add(Item.GLOWSTONE_DUST, 384);
         add(Item.RAW_FISH, 64);
@@ -198,12 +197,17 @@ public class VanillaEMCDef implements EMCDef {
         addWithMetadata(Item.DYE, 15, 48);
         add(Item.BONE, 144);
         add(Item.SUGAR, 32);
-        add(Item.CAKE, 411);
+        add(Item.CAKE, 2715);
         add(Item.BED, 168);
         add(Item.REPEATER, 203);
         add(Item.COOKIE, 22);
         add(Item.MAP, 1344);
         add(Item.SHEARS, 512);
+        add(Block.JACK_O_LANTERN, 153);
+        add(Item.MUSHROOM_STEW, 70);
+        add(Item.GUNPOWDER, 192);
+        add(Item.SNOWBALL, 1);
+        add(Block.SNOW_BLOCK, 4);
 //        add(Item.ALCHEMICALCOAL, 512);
 //        add(Item.MOBIUSFUEL, 2048);
 //        add(Item.DARKMATTER, 139264);
