@@ -1,9 +1,14 @@
 package net.mitask.emcgenesis;
 
+import net.fabricmc.api.EnvType;
+import net.fabricmc.loader.api.FabricLoader;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.mitask.emcgenesis.util.ItemUtil;
+import net.modificationstation.stationapi.api.mod.entrypoint.Entrypoint;
 import net.modificationstation.stationapi.api.tag.TagKey;
+import net.modificationstation.stationapi.api.util.Namespace;
+import net.modificationstation.stationapi.api.util.Null;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -11,8 +16,11 @@ import java.util.LinkedHashMap;
 import java.util.Map;
 
 public class EMCGenesis {
-    public static final Logger LOGGER = LoggerFactory.getLogger("EMCGenesis");
+    @Entrypoint.Namespace
+    public static final Namespace NAMESPACE = Null.get();
+    public static final EnvType ENV = FabricLoader.getInstance().getEnvironmentType();
 
+    public static final Logger LOGGER = LoggerFactory.getLogger("EMCGenesis");
     public static Map<String, Long> emcMap = new LinkedHashMap<>();
 
     public static void addItem(Item item, long amount) {

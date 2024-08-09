@@ -76,10 +76,13 @@ public class EMCManager {
             return getPlayer(playerEntity).getEMC();
         }
         public static Player getPlayer(PlayerEntity playerEntity) {
-            return StateManager.getOrCreateState(
+            Player player = StateManager.getOrCreateState(
                     Player.class,
                     "emcgenesis_player_" + UUID.nameUUIDFromBytes(playerEntity.name.getBytes(StandardCharsets.UTF_8))
             );
+            if(player != null) player.player = playerEntity;
+
+            return player;
         }
     }
 }
