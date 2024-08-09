@@ -1,7 +1,6 @@
 package net.mitask.emcgenesis.util;
 
 import lombok.Getter;
-import lombok.Setter;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NbtCompound;
@@ -12,7 +11,7 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 @Getter
-@Setter
+@SuppressWarnings("unused")
 public class Player extends PersistentState {
     private long EMC;
     private List<String> learnt;

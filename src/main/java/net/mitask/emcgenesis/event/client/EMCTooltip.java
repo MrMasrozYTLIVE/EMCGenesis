@@ -13,7 +13,7 @@ public class EMCTooltip {
         if (emc == 0) return;
 
         String emcString = String.format("%,d", emc);
-        String isLearnt = EMCManager.PLAYER.getPlayer(event.inventory.player).isLearnt(item) ? "§a\\/" : "§cX";
+        String isLearnt = EMCManager.PLAYER.getPlayer(event.inventory.player).isLearnt(item) ? "§a+" : "§c-";
         event.tooltip.add("§eEMC: §r" + emcString + " (" + isLearnt + "§r)");
         if(event.itemStack.count > 1) event.tooltip.add("§eStack EMC: §r" + String.format("%,d", emc * event.itemStack.count));
     }
