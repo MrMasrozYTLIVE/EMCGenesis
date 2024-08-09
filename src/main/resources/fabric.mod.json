@@ -18,11 +18,16 @@
   "environment": "*",
   "entrypoints": {
     "stationapi:event_bus": [
-      "net.mitask.emcgenesis.event.InitializeEMCEvent"
+      "net.mitask.emcgenesis.event.common.InitializeEMCEvent",
+      "net.mitask.emcgenesis.event.common.InitListener"
     ],
     "stationapi:event_bus_client": [
       "net.mitask.emcgenesis.event.client.EMCTooltip"
     ],
+    "emcgenesis:event_bus": [
+      "net.mitask.emcgenesis.event.common.VanillaEMCDef"
+    ],
+
     "main": [
       "net.mitask.emcgenesis.FabricMain"
     ]

@@ -1,7 +1,8 @@
-package net.mitask.emcgenesis.event;
+package net.mitask.emcgenesis.event.common;
 
 import com.mojang.datafixers.util.Either;
 import net.mine_diver.unsafeevents.listener.EventListener;
+import net.mine_diver.unsafeevents.listener.ListenerPriority;
 import net.minecraft.ShapedRecipe;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
@@ -10,12 +11,15 @@ import net.minecraft.recipe.CraftingRecipeManager;
 import net.minecraft.recipe.ShapelessRecipe;
 import net.mitask.emcgenesis.EMCGenesis;
 import net.mitask.emcgenesis.api.EMCManager;
-import net.mitask.emcgenesis.api.def.VanillaEMCDef;
+import net.mitask.emcgenesis.api.event.EMCDefEvent;
 import net.mitask.emcgenesis.util.ItemUtil;
+import net.modificationstation.stationapi.api.StationAPI;
 import net.modificationstation.stationapi.api.event.registry.RegistriesFrozenEvent;
 import net.modificationstation.stationapi.api.tag.TagKey;
 import net.modificationstation.stationapi.impl.recipe.StationShapedRecipe;
 import net.modificationstation.stationapi.impl.recipe.StationShapelessRecipe;
+import org.apache.logging.slf4j.Log4jLoggerFactory;
+import org.slf4j.LoggerFactory;
 
 import java.util.*;
 import java.util.concurrent.ConcurrentLinkedQueue;
@@ -23,19 +27,19 @@ import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.concurrent.atomic.AtomicLong;
 
 public class InitializeEMCEvent {
-    @EventListener
+    @EventListener(priority = ListenerPriority.HIGHEST)
     public void initializeEMC(RegistriesFrozenEvent event) {
-        EMCGenesis.LOGGER.info("Loading EMC Def");
-        EMCManager.addDef(new VanillaEMCDef());
+        EMCGenesis.LOGGER.info("Loading EMC Definitions");
+        StationAPI.EVENT_BUS.post(new EMCDefEvent());
 
-        List recipes = CraftingRecipeManager.getInstance().getRecipes();
+        List<Object> recipes = CraftingRecipeManager.getInstance().getRecipes();
         EMCGenesis.LOGGER.info("Loading EMC from {} recipes", recipes.size());
         iterateOverRecipes(recipes);
 
         recalculateEMC();
     }
 
-    private void iterateOverRecipes(List recipes) {
+    private void iterateOverRecipes(List<Object> recipes) {
         for(Object rec : recipes) {
             var input = getInputs(rec);
             CraftingRecipe recipe = (CraftingRecipe) rec;
@@ -71,8 +75,8 @@ public class InitializeEMCEvent {
 
     ConcurrentLinkedQueue<Object> retryRecipes = new ConcurrentLinkedQueue<>();
     private void handleRecipe(long calculatedEMC, ItemStack output) {
-//        I will actually let it override EMC to 0, so I can know if something is wrong
-//        if(calculatedEMC == 0) return;
+        if(calculatedEMC == 0) return;
+//            EMCGenesis.LOGGER.error("Item {} calculated EMC from recipe equals 0!", ItemUtil.toStringId(output.getItem()));
 
         long setEMC = EMCManager.ITEM.getEMC(output);
 
