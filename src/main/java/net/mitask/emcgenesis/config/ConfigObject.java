@@ -7,6 +7,4 @@ public class ConfigObject {
     public String checkMark = "+";
     @ConfigEntry(name = "Deny mark")
     public String danyMark = "-";
-    @ConfigEntry(name = "Learning status", description = "Should learning status be visible?")
-    public Boolean isLearningVisible = true;
 }

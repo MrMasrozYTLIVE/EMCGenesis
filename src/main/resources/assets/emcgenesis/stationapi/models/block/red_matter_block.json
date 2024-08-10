@@ -1,0 +1,12 @@
+{
+	"parent": "minecraft:block/cube",
+	"textures": {
+		"particle": "emcgenesis:block/red_matter_block",
+		"north": "emcgenesis:block/red_matter_block",
+		"south": "emcgenesis:block/red_matter_block",
+		"east": "emcgenesis:block/red_matter_block",
+		"west": "emcgenesis:block/red_matter_block",
+		"up": "emcgenesis:block/red_matter_block",
+		"down": "emcgenesis:block/red_matter_block"
+	}
+}

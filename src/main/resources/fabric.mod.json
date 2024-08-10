@@ -21,7 +21,9 @@
       "net.mitask.emcgenesis.EMCGenesis",
       "net.mitask.emcgenesis.event.common.InitializeEMCEvent",
       "net.mitask.emcgenesis.event.common.PacketRegistry",
-      "net.mitask.emcgenesis.event.common.InitListener"
+      "net.mitask.emcgenesis.event.common.InitListener",
+      "net.mitask.emcgenesis.event.common.ItemListener",
+      "net.mitask.emcgenesis.event.common.TextureListener"
     ],
     "stationapi:event_bus_client": [
       "net.mitask.emcgenesis.event.client.EMCTooltip"

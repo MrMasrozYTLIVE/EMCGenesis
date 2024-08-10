@@ -1,0 +1,35 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "pattern": [
+    "ABC",
+    "SDS",
+    "IMI"
+  ],
+  "key": {
+    "A": {
+      "item": "emcgenesis:low_covalence_dust"
+    },
+    "B": {
+      "item": "emcgenesis:middle_covalence_dust"
+    },
+    "C": {
+      "item": "emcgenesis:high_covalence_dust"
+    },
+    "S": {
+      "item": "minecraft:stone"
+    },
+    "D": {
+      "item": "minecraft:diamond"
+    },
+    "M": {
+      "item": "minecraft:chest"
+    },
+    "I": {
+      "item": "minecraft:iron_ingot"
+    }
+  },
+  "result": {
+    "item": "emcgenesis:alchemy_chest",
+    "count": 1
+  }
+}

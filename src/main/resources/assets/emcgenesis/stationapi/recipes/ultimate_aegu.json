@@ -1,0 +1,20 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "pattern": [
+    "###",
+    "#O#",
+    "###"
+  ],
+  "key": {
+    "#": {
+      "item": "emcgenesis:advanced_aegu"
+    },
+    "O": {
+      "item": "emcgenesis:philosopher_stone"
+    }
+  },
+  "result": {
+    "item": "emcgenesis:ultimate_aegu",
+    "count": 1
+  }
+}

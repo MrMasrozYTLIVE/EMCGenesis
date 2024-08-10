@@ -1,0 +1,6 @@
+{
+  "parent": "minecraft:item/handheld",
+  "textures": {
+    "layer0": "emcgenesis:item/tools/dark_matter_sword"
+  }
+}

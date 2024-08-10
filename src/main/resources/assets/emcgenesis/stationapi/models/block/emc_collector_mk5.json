@@ -1,0 +1,12 @@
+{
+	"parent": "minecraft:block/cube",
+	"textures": {
+		"particle": "emcgenesis:block/emc_collector/side",
+		"north": "emcgenesis:block/emc_collector/front",
+		"south": "emcgenesis:block/emc_collector/side",
+		"east": "emcgenesis:block/emc_collector/side",
+		"west": "emcgenesis:block/emc_collector/side",
+		"up": "emcgenesis:block/emc_collector/top_mk5",
+		"down": "emcgenesis:block/emc_collector/bottom"
+	}
+}

@@ -18,14 +18,18 @@ public class EMCTooltip {
 
         PlayerEntity playerEntity = event.inventory.player;
         Player player = playerEntity.world.isRemote ? EMCGenesisClient.serverPlayerState : EMCManager.PLAYER.getPlayer(playerEntity);
+        boolean isLearnt = player.isLearnt(item);
 
         String checkMark = "§a" + Config.getCheckMark();
-        String denyMark = "§c" + Config.getDenyMark();
-        String isLearnt = Config.isLearningVisible() ?
-                    " (" + (player.isLearnt(item) ? checkMark : denyMark) + "§r)" :
+        boolean checkVisible = isLearnt && !Config.getCheckMark().isBlank();
+        String danyMark = "§c" + Config.getDenyMark();
+        boolean danyVisible = !isLearnt && !Config.getDenyMark().isBlank();
+
+        String learningStatus = (checkVisible || danyVisible) ?
+                    " (" + (isLearnt ? checkMark : danyMark) + "§r)" :
                     "";
 
-        event.tooltip.add("§eEMC: §r" + String.format("%,d", emc) + isLearnt);
+        event.tooltip.add("§eEMC: §r" + String.format("%,d", emc) + learningStatus);
         if(event.itemStack.count > 1) event.tooltip.add("§eStack EMC: §r" + String.format("%,d", emc * event.itemStack.count));
     }
 }

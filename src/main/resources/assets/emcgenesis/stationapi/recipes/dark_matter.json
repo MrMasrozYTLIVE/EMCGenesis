@@ -1,0 +1,20 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "pattern": [
+    "###",
+    "#O#",
+    "###"
+  ],
+  "key": {
+    "#": {
+      "item": "emcgenesis:aeternalis_fuel"
+    },
+    "O": {
+      "item": "minecraft:diamond_block"
+    }
+  },
+  "result": {
+    "item": "emcgenesis:dark_matter",
+    "count": 1
+  }
+}

@@ -1,0 +1,23 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "pattern": [
+    "#A#",
+    "#B#",
+    "###"
+  ],
+  "key": {
+    "#": {
+      "item": "minecraft:glowstone"
+    },
+    "A": {
+      "item": "emcgenesis:mobius_fuel"
+    },
+    "B": {
+      "item": "emcgenesis:emc_collector_mk1"
+    }
+  },
+  "result": {
+    "item": "emcgenesis:emc_collector_mk2",
+    "count": 1
+  }
+}

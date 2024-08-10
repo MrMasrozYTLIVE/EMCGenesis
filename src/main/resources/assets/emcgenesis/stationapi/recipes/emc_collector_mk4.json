@@ -1,0 +1,20 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "pattern": [
+    "###",
+    "#O#",
+    "###"
+  ],
+  "key": {
+    "#": {
+      "item": "emcgenesis:emc_collector_mk3"
+    },
+    "O": {
+      "item": "emcgenesis:red_matter"
+    }
+  },
+  "result": {
+    "item": "emcgenesis:emc_collector_mk4",
+    "count": 1
+  }
+}

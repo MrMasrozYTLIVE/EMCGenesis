@@ -200,7 +200,7 @@ public class VanillaEMCDef {
         event.add(Item.SNOWBALL, 1);
         event.add(Block.SNOW_BLOCK, 4);
 //        event.add(Item.ALCHEMICALCOAL, 512);
-//        event.add(Item.MOBIUSFUEL, 2048);
+        event.add(ItemListener.MOBIUSFUEL, 2048);
 //        event.add(Item.DARKMATTER, 139264);
 //        event.addWithMetadata(Item.COVALENCEDUST, 0, 1);
 //        event.addWithMetadata(Item.COVALENCEDUST, 1, 8);
@@ -210,7 +210,7 @@ public class VanillaEMCDef {
 //        event.add(Item.KLEINSTAR3, 393216);
 //        event.add(Item.KLEINSTAR4, 1572864);
 //        event.add(Item.KLEINSTAR5, 6291456);
-//        event.add(Item.REDMATTER, 466944);
+        event.add(ItemListener.REDMATTER, 466944);
 //        event.add(Item.AETERNALISFUEL, 8192);
 //        event.add(Item.KLEINSTAR6, 25165824);
     }

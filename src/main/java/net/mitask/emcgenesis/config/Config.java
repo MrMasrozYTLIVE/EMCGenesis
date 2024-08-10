@@ -16,8 +16,4 @@ public class Config {
     public static String getDenyMark() {
         return INSTANCE.danyMark;
     }
-
-    public static Boolean isLearningVisible() {
-        return INSTANCE.isLearningVisible;
-    }
 }
