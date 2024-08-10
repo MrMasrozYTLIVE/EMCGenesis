@@ -1,4 +1,4 @@
-package net.mitask.emcgenesis.item;
+package net.mitask.emcgenesis.util;
 
 import net.mitask.emcgenesis.EMCGenesis;
 import net.modificationstation.stationapi.api.template.item.TemplateItem;

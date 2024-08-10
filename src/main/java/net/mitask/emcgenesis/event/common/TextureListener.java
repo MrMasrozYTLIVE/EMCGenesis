@@ -1,7 +1,7 @@
 package net.mitask.emcgenesis.event.common;
 
 import net.mine_diver.unsafeevents.listener.EventListener;
-import net.mitask.emcgenesis.item.BaseItem;
+import net.mitask.emcgenesis.util.BaseItem;
 import net.modificationstation.stationapi.api.client.event.texture.TextureRegisterEvent;
 
 public class TextureListener {

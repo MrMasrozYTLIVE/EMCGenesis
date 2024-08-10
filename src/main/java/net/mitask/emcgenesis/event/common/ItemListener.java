@@ -1,7 +1,9 @@
 package net.mitask.emcgenesis.event.common;
 
+import com.matthewperiut.accessoryapi.api.AccessoryRegister;
 import net.mine_diver.unsafeevents.listener.EventListener;
 import net.mitask.emcgenesis.item.*;
+import net.mitask.emcgenesis.util.BaseItem;
 import net.modificationstation.stationapi.api.event.registry.ItemRegistryEvent;
 
 import java.util.ArrayList;
@@ -14,7 +16,7 @@ public class ItemListener {
     public static RedMatter REDMATTER;
     public static AeternalisFuel AETERNALISFUEL;
     public static AlchemyPad ALCHEMYPAD;
-    public static AlchemyFuel ALCHEMYFUEL;
+    public static AlchemicalFuel ALCHEMICALFUEL;
     public static TomeOfKnowledge TOMEOFKNOWLEDGE;
     public static DarkMatter DARKMATTER;
 
@@ -25,8 +27,11 @@ public class ItemListener {
         ITEMS.add(REDMATTER = new RedMatter("red_matter"));
         ITEMS.add(AETERNALISFUEL = new AeternalisFuel("aeternalis_fuel"));
         ITEMS.add(ALCHEMYPAD = new AlchemyPad("alchemy_pad"));
-        ITEMS.add(ALCHEMYFUEL = new AlchemyFuel("alchemy_fuel"));
+        ITEMS.add(ALCHEMICALFUEL = new AlchemicalFuel("alchemical_fuel"));
         ITEMS.add(TOMEOFKNOWLEDGE = new TomeOfKnowledge("tome_of_knowledge"));
         ITEMS.add(DARKMATTER = new DarkMatter("dark_matter"));
+
+        AccessoryRegister.add("ring");
+        AccessoryRegister.add("ring");
     }
 }

@@ -1,0 +1,43 @@
+item.@.tome_of_knowledge.name=Tome of Knowledge
+item.@.philosopher_stone.name=Philosopher's Stone
+item.@.alchemy_pad.name=Alchemy Pad
+item.@.alchemical_fuel.name=Alchemical Fuel
+item.@.mobius_fuel.name=Mobius Fuel
+item.@.aeternalis_fuel.name=Aeternalis Fuel
+item.@.dark_matter.name=Dark Matter
+item.@.red_matter.name=Red Matter
+item.@.low_covalence_dust.name=Low Covalence Dust
+item.@.middle_covalence_dust.name=Middle Covalence Dust
+item.@.high_covalence_dust.name=High Covalence Dust
+item.@.dark_matter_sword.name=Dark Matter Sword
+item.@.dark_matter_axe.name=Dark Matter Axe
+item.@.dark_matter_pickaxe.name=Dark Matter Pickaxe
+item.@.dark_matter_shovel.name=Dark Matter Shovel
+item.@.dark_matter_hoe.name=Dark Matter Hoe
+item.@.red_matter_sword.name=Red Matter Sword
+item.@.red_matter_axe.name=Red Matter Axe
+item.@.red_matter_pickaxe.name=Red Matter Pickaxe
+item.@.red_matter_shovel.name=Red Matter Shovel
+item.@.red_matter_hoe.name=Red Matter Hoe
+
+block.@.alchemy_table.name=Alchemy Table
+block.@.emc_collector_mk1.name=EMC Collector MK-1
+block.@.emc_collector_mk2.name=EMC Collector MK-2
+block.@.emc_collector_mk3.name=EMC Collector MK-3
+block.@.emc_collector_mk4.name=EMC Collector MK-4
+block.@.emc_collector_mk5.name=EMC Collector MK-5
+block.@.alchemy_chest.name=Alchemy Chest
+block.@.emc_condenser.name=EMC Condenser
+block.@.emc_condenser_mk2.name=EMC Condenser MK-2
+block.@.emc_repeater.name=EMC Repeater
+block.@.aegu.name=Alchemical Energy Generating Unit
+block.@.advanced_aegu.name=Advanced AEGU
+block.@.ultimate_aegu.name=Ultimate AEGU
+block.@.dark_matter_block.name=Dark Matter Block
+block.@.red_matter_block.name=Red Matter Block
+
+container.@.alchemy_table=Alchemy Table
+container.@.emc_condenser=EMC Condenser
+container.@.emc_collector=EMC Collector
+
+key.@.charge=Charge
