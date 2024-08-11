@@ -18,13 +18,12 @@ import net.modificationstation.stationapi.api.event.registry.RegistriesFrozenEve
 import net.modificationstation.stationapi.api.tag.TagKey;
 import net.modificationstation.stationapi.impl.recipe.StationShapedRecipe;
 import net.modificationstation.stationapi.impl.recipe.StationShapelessRecipe;
-import org.apache.logging.slf4j.Log4jLoggerFactory;
-import org.slf4j.LoggerFactory;
 
 import java.util.*;
 import java.util.concurrent.ConcurrentLinkedQueue;
 import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.concurrent.atomic.AtomicLong;
+import java.util.stream.Collectors;
 
 public class InitializeEMCEvent {
     @EventListener(priority = ListenerPriority.HIGHEST)
@@ -67,7 +66,10 @@ public class InitializeEMCEvent {
             iterateOverRecipes(retryRecipes.stream().toList());
 
             if(!retryRecipes.isEmpty() && wasEMCCalculated) recalculateEMC();
-            else if(!retryRecipes.isEmpty()) EMCGenesis.LOGGER.error("Did not calculate new EMC but still having {} recipes unmapped!", retryRecipes.size());
+            else if(!retryRecipes.isEmpty()) {
+                EMCGenesis.LOGGER.error("Did not calculate new EMC but still having {} recipes unmapped!", retryRecipes.size());
+                EMCGenesis.LOGGER.error("Unmapped items: {}", retryRecipes.stream().map(this::getOutputId).collect(Collectors.joining(", ")));
+            }
         });
         thread.setName("EMCCalculation");
         thread.start();
@@ -79,8 +81,9 @@ public class InitializeEMCEvent {
 //            EMCGenesis.LOGGER.error("Item {} calculated EMC from recipe equals 0!", ItemUtil.toStringId(output.getItem()));
 
         long setEMC = EMCManager.ITEM.getEMC(output);
+        if(setEMC == 0) return;
 
-        if(setEMC == 0 && setEMC != calculatedEMC) {
+        if(setEMC != calculatedEMC) {
             EMCGenesis.LOGGER.warn("Overwriting EMC for item {} based of its recipe!", ItemUtil.toStringId(output.getItem()));
             EMCGenesis.LOGGER.debug("This item has calculated EMC of {} ({}emc / {}count)", calculatedEMC, calculatedEMC * output.count, output.count);
             EMCGenesis.LOGGER.debug("This item set EMC is {}", setEMC);
@@ -105,6 +108,15 @@ public class InitializeEMCEvent {
         if(rec instanceof StationShapelessRecipe recipe) return Arrays.stream(recipe.getInputs()).toList();
         return null;
     }
+
+    private String getOutputId(Object rec) {
+        if(rec instanceof ShapedRecipe recipe) return ItemUtil.toStringId(recipe.getOutput());
+        if(rec instanceof ShapelessRecipe recipe) return ItemUtil.toStringId(recipe.getOutput());
+        if(rec instanceof StationShapedRecipe recipe) return ItemUtil.toStringId(recipe.getOutput());
+        if(rec instanceof StationShapelessRecipe recipe) return ItemUtil.toStringId(recipe.getOutput());
+        return "Unknown Recipe!";
+    }
+
 
     private long calculateEMC(ItemStack output, List<Either<TagKey<Item>, ItemStack>> grid) {
         AtomicLong emc = new AtomicLong();

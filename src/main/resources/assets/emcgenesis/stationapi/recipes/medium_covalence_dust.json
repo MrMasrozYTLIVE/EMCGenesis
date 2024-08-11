@@ -1,0 +1,18 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "pattern": [
+    "#O"
+  ],
+  "key": {
+    "#": {
+      "item": "minecraft:iron_ingot"
+    },
+    "O": {
+      "item": "minecraft:redstone"
+    }
+  },
+  "result": {
+    "item": "emcgenesis:covalence_dust_medium",
+    "count": 40
+  }
+}
