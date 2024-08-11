@@ -81,9 +81,8 @@ public class InitializeEMCEvent {
 //            EMCGenesis.LOGGER.error("Item {} calculated EMC from recipe equals 0!", ItemUtil.toStringId(output.getItem()));
 
         long setEMC = EMCManager.ITEM.getEMC(output);
-        if(setEMC == 0) return;
 
-        if(setEMC != calculatedEMC) {
+        if(setEMC == 0) {
             EMCGenesis.LOGGER.warn("Overwriting EMC for item {} based of its recipe!", ItemUtil.toStringId(output.getItem()));
             EMCGenesis.LOGGER.debug("This item has calculated EMC of {} ({}emc / {}count)", calculatedEMC, calculatedEMC * output.count, output.count);
             EMCGenesis.LOGGER.debug("This item set EMC is {}", setEMC);

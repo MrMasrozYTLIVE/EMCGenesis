@@ -21,7 +21,7 @@ public class EMCGenesis {
     public static final EnvType ENV = FabricLoader.getInstance().getEnvironmentType();
 
     public static final Logger LOGGER = LoggerFactory.getLogger("EMCGenesis");
-    public static Map<String, Long> emcMap = new LinkedHashMap<>();
+    private static final Map<String, Long> emcMap = new LinkedHashMap<>();
 
     public static void addItem(Item item, long amount) {
         addItem(ItemUtil.toStringId(item), amount);
@@ -61,5 +61,12 @@ public class EMCGenesis {
         if(meta <= 0) return get(item);
 
         return emcMap.getOrDefault(ItemUtil.toStringId(item) + "_" + meta, 0L);
+    }
+
+    public static boolean isClient() {
+        return ENV == EnvType.CLIENT;
+    }
+    public static boolean isServer() {
+        return ENV == EnvType.SERVER;
     }
 }

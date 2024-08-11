@@ -5,7 +5,7 @@ import net.minecraft.client.gui.DrawContext;
 import net.minecraft.client.gui.hud.InGameHud;
 import net.mitask.emcgenesis.EMCGenesisClient;
 import net.mitask.emcgenesis.api.EMCManager;
-import net.mitask.emcgenesis.util.Player;
+import net.mitask.emcgenesis.state.Player;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;

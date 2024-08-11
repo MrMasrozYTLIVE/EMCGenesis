@@ -1,4 +1,4 @@
-package net.mitask.emcgenesis.util;
+package net.mitask.emcgenesis.state;
 
 import lombok.Getter;
 import net.fabricmc.api.EnvType;
@@ -10,6 +10,7 @@ import net.minecraft.nbt.NbtCompound;
 import net.minecraft.world.PersistentState;
 import net.mitask.emcgenesis.EMCGenesis;
 import net.mitask.emcgenesis.packet.PlayerStatePacket;
+import net.mitask.emcgenesis.util.ItemUtil;
 import net.modificationstation.stationapi.api.network.packet.PacketHelper;
 
 import java.util.ArrayList;
@@ -76,7 +77,7 @@ public class Player extends PersistentState {
     public void setDirty(boolean dirty) {
         super.setDirty(dirty);
 
-        if(EMCGenesis.ENV == EnvType.SERVER) {
+        if(EMCGenesis.isServer()) {
             sendPlayerState();
         }
     }

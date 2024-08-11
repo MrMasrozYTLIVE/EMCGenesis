@@ -2,14 +2,13 @@ package net.mitask.emcgenesis.packet;
 
 import lombok.AllArgsConstructor;
 import lombok.NoArgsConstructor;
-import net.fabricmc.api.EnvType;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.network.NetworkHandler;
 import net.minecraft.network.packet.Packet;
 import net.mitask.emcgenesis.EMCGenesis;
 import net.mitask.emcgenesis.EMCGenesisClient;
 import net.mitask.emcgenesis.api.EMCManager;
-import net.mitask.emcgenesis.util.Player;
+import net.mitask.emcgenesis.state.Player;
 import net.modificationstation.stationapi.api.entity.player.PlayerHelper;
 import net.modificationstation.stationapi.api.network.packet.IdentifiablePacket;
 import net.modificationstation.stationapi.api.network.packet.PacketHelper;
@@ -40,7 +39,7 @@ public class PlayerStatePacket extends Packet implements IdentifiablePacket {
             throw new RuntimeException(e);
         }
 
-        if(EMCGenesis.ENV == EnvType.CLIENT) {
+        if(EMCGenesis.isClient()) {
             EMCGenesisClient.serverPlayerState = new Player(EMC, learnt);
         }
     }

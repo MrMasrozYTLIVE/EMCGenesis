@@ -1,5 +1,12 @@
 package net.mitask.emcgenesis.item;
 
+import net.minecraft.entity.player.PlayerEntity;
+import net.minecraft.item.ItemStack;
+import net.minecraft.world.World;
+import net.mitask.emcgenesis.EMCGenesis;
+import net.mitask.emcgenesis.gui.AlchemicalChestGUI;
+import net.mitask.emcgenesis.state.AlchemyBagState;
+import net.mitask.emcgenesis.state.StateManager;
 import net.mitask.emcgenesis.util.items.BaseItem;
 import net.modificationstation.stationapi.api.util.Identifier;
 
@@ -13,6 +20,23 @@ public class AlchemyBag extends BaseItem {
         setTranslationKey(Identifier.of(ID.getNamespace(), "alchemy_bag"));
         setMaxCount(1);
         this.color = color.name().toLowerCase(Locale.ROOT);
+    }
+
+    @Override
+    public ItemStack use(ItemStack stack, World world, PlayerEntity playerEntity) {
+        if(world.isRemote && EMCGenesis.isClient()) return stack;
+
+        AlchemyBagState state = getState(playerEntity);
+        if(state != null) new AlchemicalChestGUI(playerEntity.inventory, state).openGUI(playerEntity);
+
+        return stack;
+    }
+
+    public AlchemyBagState getState(PlayerEntity playerEntity) {
+        return StateManager.getOrCreateState(
+                AlchemyBagState.class,
+                "emcgenesis_alchemybag_" + color + "_" + StateManager.generateUUID(playerEntity)
+        );
     }
 
     @Override
@@ -31,7 +55,7 @@ public class AlchemyBag extends BaseItem {
         CYAN,
         GRAY,
         GREEN,
-        LIGHT_BLUE,
+        LIGHTBLUE,
         LIME,
         MAGENTA,
         ORANGE,

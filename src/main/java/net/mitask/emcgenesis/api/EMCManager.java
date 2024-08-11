@@ -7,12 +7,9 @@ import net.minecraft.item.ItemStack;
 import net.mitask.emcgenesis.EMCGenesis;
 import net.mitask.emcgenesis.util.IdentifierUtil;
 import net.mitask.emcgenesis.util.ItemUtil;
-import net.mitask.emcgenesis.util.Player;
-import net.mitask.emcgenesis.util.StateManager;
+import net.mitask.emcgenesis.state.Player;
+import net.mitask.emcgenesis.state.StateManager;
 import net.modificationstation.stationapi.api.tag.TagKey;
-
-import java.nio.charset.StandardCharsets;
-import java.util.UUID;
 
 @SuppressWarnings("unused")
 public class EMCManager {
@@ -78,7 +75,7 @@ public class EMCManager {
         public static Player getPlayer(PlayerEntity playerEntity) {
             Player player = StateManager.getOrCreateState(
                     Player.class,
-                    "emcgenesis_player_" + UUID.nameUUIDFromBytes(playerEntity.name.getBytes(StandardCharsets.UTF_8))
+                    "emcgenesis_player_" + StateManager.generateUUID(playerEntity)
             );
             if(player != null) player.player = playerEntity;
 

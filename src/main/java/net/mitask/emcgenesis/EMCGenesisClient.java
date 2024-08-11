@@ -5,7 +5,7 @@ import net.fabricmc.api.Environment;
 import net.fabricmc.loader.api.FabricLoader;
 import net.minecraft.client.Minecraft;
 import net.minecraft.world.World;
-import net.mitask.emcgenesis.util.Player;
+import net.mitask.emcgenesis.state.Player;
 
 @Environment(EnvType.CLIENT)
 public class EMCGenesisClient {

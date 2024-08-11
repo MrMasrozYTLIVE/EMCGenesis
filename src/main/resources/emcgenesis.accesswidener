@@ -2,3 +2,7 @@ accessWidener v2 named
 
 accessible field net/minecraft/ShapedRecipe input [Lnet/minecraft/item/ItemStack;
 accessible field net/minecraft/recipe/ShapelessRecipe input Ljava/util/List;
+
+accessible method net/minecraft/entity/player/ServerPlayerEntity method_314 ()V
+accessible field net/minecraft/entity/player/ServerPlayerEntity field_260 I
+
