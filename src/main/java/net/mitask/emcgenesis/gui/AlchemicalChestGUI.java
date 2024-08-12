@@ -26,7 +26,7 @@ public class AlchemicalChestGUI extends HandledScreen {
         else if(playerEntity instanceof ServerPlayerEntity serverPlayer) {
             serverPlayer.method_314();
             serverPlayer.field_255.sendPacket(new OpenScreenS2CPacket(serverPlayer.field_260, 0, inventory.getName(), inventory.size()));
-            this.container = new AlchemicalChestHandler(this.inventory, inventory);
+            this.container = new AlchemicalChestHandler(serverPlayer.inventory, inventory);
             this.container.syncId = serverPlayer.field_260;
             this.container.addListener(serverPlayer);
         }

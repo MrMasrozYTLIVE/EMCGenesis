@@ -1,10 +1,12 @@
 package net.mitask.emcgenesis.gui;
 
 import net.minecraft.entity.player.PlayerEntity;
+import net.minecraft.entity.player.PlayerInventory;
 import net.minecraft.inventory.Inventory;
 import net.minecraft.item.ItemStack;
 import net.minecraft.screen.ScreenHandler;
 import net.minecraft.screen.slot.Slot;
+import net.mitask.emcgenesis.item.AlchemyBag;
 
 public class AlchemicalChestHandler extends ScreenHandler {
     private final Inventory inventory;
@@ -21,9 +23,9 @@ public class AlchemicalChestHandler extends ScreenHandler {
 
         int posX = 12;
         int posY = 5;
-        for(int x = 0; x < width; x++) {
-            for(int y = 0; y < 8; y++) {
-                this.addSlot(new Slot(inventory, index++, posX + (delta * x), posY + (delta * y)));
+        for(int y = 0; y < 8; y++) {
+            for(int x = 0; x < width; x++) {
+                this.addSlot(new CustomSlot(inventory, index++, posX + (delta * x), posY + (delta * y), playerInventory));
             }
         }
 
@@ -66,5 +68,41 @@ public class AlchemicalChestHandler extends ScreenHandler {
         }
 
         return var2;
+    }
+
+    static class CustomSlot extends Slot {
+        private final PlayerInventory playerInventory;
+
+        public CustomSlot(Inventory inventory, int index, int x, int y, Inventory playerInventory) {
+            super(inventory, index, x, y);
+            this.playerInventory = (PlayerInventory) playerInventory;
+        }
+
+        @Override
+        public boolean canInsert(ItemStack stack) {
+            if(stack != null && stack.getItem() instanceof AlchemyBag) return false;
+            return super.canInsert(stack);
+        }
+
+        @Override
+        public void setStack(ItemStack stack) {
+            if(stack != null && stack.getItem() instanceof AlchemyBag) {
+                boolean wasItemPutInFuckingInventory = false;
+
+                for(int slot = 0; slot < 36; slot++) {
+                    if(playerInventory.getStack(slot) != null) continue;
+
+                    wasItemPutInFuckingInventory = true;
+                    playerInventory.setStack(slot, stack);
+                    break;
+                }
+
+                if(!wasItemPutInFuckingInventory) playerInventory.setCursorStack(stack);
+
+                return;
+            }
+
+            super.setStack(stack);
+        }
     }
 }
