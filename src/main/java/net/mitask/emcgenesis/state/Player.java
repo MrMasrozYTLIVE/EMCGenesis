@@ -9,6 +9,7 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NbtCompound;
 import net.minecraft.world.PersistentState;
 import net.mitask.emcgenesis.EMCGenesis;
+import net.mitask.emcgenesis.api.EMCManager;
 import net.mitask.emcgenesis.packet.PlayerStatePacket;
 import net.mitask.emcgenesis.util.ItemUtil;
 import net.modificationstation.stationapi.api.network.packet.PacketHelper;
@@ -41,6 +42,12 @@ public class Player extends PersistentState {
     }
 
     public void addLearnt(String item) {
+        if(EMCManager.ITEM.getEMC(item) == 0) {
+            String nickname = player == null ? "Unknown" : player.name;
+            EMCGenesis.LOGGER.warn("Tried to add item {} to player {} ({}) but it's not in EMC map!", item, nickname, id);
+            return;
+        }
+
         this.learnt.add(item);
         markDirty();
     }

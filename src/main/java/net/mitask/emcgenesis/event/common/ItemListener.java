@@ -21,7 +21,7 @@ public class ItemListener {
 
     @EventListener
     private static void registerItems(ItemRegistryEvent event) {
-        ITEMS.add(new PhilosopherStone("philosopher_stone"));
+        ITEMS.add(new PhilosophersStone("philosophers_stone"));
         ITEMS.add(new Fuel("mobius_fuel"));
         ITEMS.add(new Matter("red_matter"));
         ITEMS.add(new Fuel("aeternalis_fuel"));

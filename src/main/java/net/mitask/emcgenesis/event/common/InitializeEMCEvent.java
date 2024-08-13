@@ -12,6 +12,7 @@ import net.minecraft.recipe.ShapelessRecipe;
 import net.mitask.emcgenesis.EMCGenesis;
 import net.mitask.emcgenesis.api.EMCManager;
 import net.mitask.emcgenesis.api.event.EMCDefEvent;
+import net.mitask.emcgenesis.item.PhilosophersStone;
 import net.mitask.emcgenesis.util.ItemUtil;
 import net.modificationstation.stationapi.api.StationAPI;
 import net.modificationstation.stationapi.api.event.registry.RegistriesFrozenEvent;
@@ -146,6 +147,7 @@ public class InitializeEMCEvent {
 
             gridItem.ifRight(item -> {
                 if(item == null) return;
+                if(item.getItem() instanceof PhilosophersStone) return;
                 if(!shouldContinue.get()) return;
 
                 long itemEmc = EMCManager.ITEM.getEMC(item);

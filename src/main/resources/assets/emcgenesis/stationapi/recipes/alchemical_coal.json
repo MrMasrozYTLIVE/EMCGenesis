@@ -1,0 +1,20 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "pattern": [
+    "#O ",
+    "OO ",
+    "O  "
+  ],
+  "key": {
+    "#": {
+      "item": "emcgenesis:philosophers_stone"
+    },
+    "O": {
+      "item": "minecraft:coal"
+    }
+  },
+  "result": {
+    "item": "emcgenesis:alchemical_coal",
+    "count": 1
+  }
+}

@@ -66,7 +66,11 @@ public class EMCManager {
         }
         public static void subtractEMC(PlayerEntity playerEntity, long amount) {
             Player player = getPlayer(playerEntity);
-            player.setEMC(Math.max(player.getEMC() - amount, 0));
+
+            if(canSubtractEMC(player.getEMC(), amount)) player.setEMC(Math.max(player.getEMC() - amount, 0));
+        }
+        public static boolean canSubtractEMC(long emc, long amount) {
+            return (emc - amount) > 0L;
         }
 
         public static Long getPlayerEMC(PlayerEntity playerEntity) {

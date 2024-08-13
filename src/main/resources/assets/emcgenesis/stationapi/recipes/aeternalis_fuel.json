@@ -1,0 +1,20 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "pattern": [
+    "#O ",
+    "OO ",
+    "O  "
+  ],
+  "key": {
+    "#": {
+      "item": "emcgenesis:philosophers_stone"
+    },
+    "O": {
+      "item": "emcgenesis:mobius_fuel"
+    }
+  },
+  "result": {
+    "item": "emcgenesis:aeternalis_fuel",
+    "count": 1
+  }
+}

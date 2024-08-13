@@ -27,7 +27,8 @@ public class EMCGenesis {
         addItem(ItemUtil.toStringId(item), amount);
     }
     public static void addItem(String id, long amount) {
-        emcMap.put(id, amount);
+        if(amount < 0) LOGGER.error("Tried to set EMC for item {} to {}!", id, amount);
+        else emcMap.put(id, amount);
     }
 
     public static void addItem(Item item, int meta, long amount) {
@@ -38,7 +39,7 @@ public class EMCGenesis {
     }
     public static void addItem(String id, int meta, long amount) {
         id = meta > 0 ? id + "_" + meta : id;
-        emcMap.put(id, amount);
+        addItem(id, amount);
     }
 
     public static void addTag(TagKey<Item> tagKey, long amount) {
